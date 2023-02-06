@@ -16,5 +16,4 @@ for i in coin:
 
     K = K % i
 
-
 print(count)
