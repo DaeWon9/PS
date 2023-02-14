@@ -4,8 +4,6 @@ M = int(input())
 S = set()
 
 for i in range(M):
-    print(S)
-    
     inputData = sys.stdin.readline().rstrip()
 
     if inputData == 'all':
