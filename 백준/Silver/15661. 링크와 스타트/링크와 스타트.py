@@ -17,7 +17,7 @@ def get_score(teams, array):
 for row in range(N):
     array.append(list(map(int, sys.stdin.readline().rstrip().split())))
 
-for i in range(2, N//2+1): #스타트 팀원의 수를 i로 관리 최대 N-1
+for i in range(2, N//2+1):
     for combi in list(combinations(range(N), i)):
         start_team = combi
         link_team = whole_member - set(combi)
