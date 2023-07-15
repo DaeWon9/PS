@@ -1,11 +1,8 @@
 import sys
 
-def round45(num):
-    return int(num + 0.5)
-
 N = int(sys.stdin.readline())
 level_list = []
-except_count = round45(N * 0.15)
+except_count = int((N * 0.15) + 0.5)
 sum = 0
 
 if (N == 0):
@@ -20,4 +17,4 @@ level_list.sort()
 for i in range(except_count, len(level_list) - except_count):
     sum += level_list[i]
 
-print(round45(sum / (N - except_count * 2)))
+print(int((sum / (N - except_count * 2)) + 0.5))
