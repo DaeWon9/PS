@@ -21,7 +21,7 @@ def get_available_adjoin_number(target_number):
 
     return result_list
 
-remocon_key = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+remocon_key = ("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
 default_channel = 100
 
 target_channel = str(sys.stdin.readline())
@@ -42,18 +42,32 @@ flag = False
 if len(available_key) > 0:
     try_channel_list.append(max(available_key) * (target_channel_length - 1))
     try_channel_list.append(min(available_key) * (target_channel_length + 1))
+    try_channel_list.append(min(available_key) * target_channel_length)
 
-if "1" in available_key and "0" in available_key:
-    try_channel_list.append("1" + "0" * target_channel_length)
+if "1" in available_key:
+    try_channel_list.append("1" + min(available_key) * target_channel_length)
 
 for key in available_key:
     try_channel_list.append(key + max(available_key) * (target_channel_length - 1))
     try_channel_list.append(key + min(available_key) * (target_channel_length - 1))
 
 for index in range(target_channel_length):
+    min_number, max_number = get_available_adjoin_number(int(target_channel[index]))
+
+    if len(available_key) > 0 and index > 0:
+        try_channel_list.append(
+            target_channel[0:index]
+            + min_number
+            + max(available_key) * (target_channel_length - index - 1)
+        )
+        try_channel_list.append(
+            target_channel[0:index]
+            + max_number
+            + min(available_key) * (target_channel_length - index - 1)
+        )
+
     if len(available_key) > 0 and target_channel[index] not in available_key:
         flag = True
-        min_number, max_number = get_available_adjoin_number(int(target_channel[index]))
         try_channel_list.append(
             target_channel[0:index]
             + min_number
