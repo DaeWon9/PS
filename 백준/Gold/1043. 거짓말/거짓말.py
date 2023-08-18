@@ -1,5 +1,4 @@
 import sys
-from collections import deque
 
 people_count, party_count = map(int, sys.stdin.readline().split())
 
@@ -12,7 +11,6 @@ visited = [False] * party_count
 for _ in range(party_count):
     input_list = list(map(int, sys.stdin.readline().split()))[1:]
     party_attended_people_list.append(set(input_list))
-
 
 while True:
     count = 0
