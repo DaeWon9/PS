@@ -7,6 +7,7 @@ def find_the_nearest_eatable_fish():
     visited[baby_shark[0]][baby_shark[1]] = True  # current baby shark pos
 
     eatable_fish_list = []
+    min_distance = -1
 
     queue = deque()
     queue.append((baby_shark[0], baby_shark[1], 0))
@@ -14,8 +15,13 @@ def find_the_nearest_eatable_fish():
     while queue:
         row, col, distance = queue.popleft()
 
+        if 0 < min_distance < distance:
+            break
+
         if distance > 0 and 0 < board[row][col] < baby_shark[2]:  # the nearest eatable
-            eatable_fish_list.append((row, col, distance))
+            if min_distance == -1:
+                min_distance = distance
+            eatable_fish_list.append((distance, row, col))
         else:
             for index in range(4):
                 dr = row + direction_y[index]
@@ -31,9 +37,9 @@ def find_the_nearest_eatable_fish():
                     queue.append((dr, dc, distance + 1))
 
     if eatable_fish_list:
-        eatable_fish_list.sort(key=lambda x: (x[2], x[0], x[1]))
-        row = eatable_fish_list[0][0]
-        col = eatable_fish_list[0][1]
+        eatable_fish_list.sort()
+        row = eatable_fish_list[0][1]
+        col = eatable_fish_list[0][2]
 
         board[row][col] = 0
         baby_shark[0] = row
@@ -44,7 +50,7 @@ def find_the_nearest_eatable_fish():
             baby_shark[2] += 1
             baby_shark[3] = 0
 
-        return eatable_fish_list[0][2]
+        return eatable_fish_list[0][0]
     else:
         return -1
 
@@ -70,7 +76,6 @@ for row in range(N):
                 input_list[col] = 0
 
     board.append(input_list)
-
 
 while True:
     distance = find_the_nearest_eatable_fish()
