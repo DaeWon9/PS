@@ -25,7 +25,7 @@ directions = [[0, 1], [1, 0] , [0, -1], [-1, 0]] # 하, 우, 상, 좌
 def bfs(board, queue, cost_board):
     board_size = len(board)
     while(queue):
-        row, col, direction, cost = queue.popleft()
+        row, col, direction, cost = queue.pop()
         
         for dir_index in range(4):
             dc = col + directions[dir_index][0]
@@ -43,7 +43,7 @@ def bfs(board, queue, cost_board):
                 # 최솟값일 경우 보드를 업데이트 후 queue.append
                 if (sub_cost < cost_board[dir_index][dr][dc]):
                     cost_board[dir_index][dr][dc] = sub_cost
-                    queue.append([dr, dc, dir_index, sub_cost])
+                    queue.appendleft([dr, dc, dir_index, sub_cost])
 
 
 def solution(board):
