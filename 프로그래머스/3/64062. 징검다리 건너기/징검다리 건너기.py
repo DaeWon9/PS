@@ -1,24 +1,21 @@
 from collections import deque
-import math
 
-def solution(stones, k):
-    max_arr = []
+def solution(stones, k):   
+    result = list()
+    dq = deque()
+    
+    if (len(stones) == k):
+        return max(stones)
+    
+    for i in range(len(stones)):
+        while dq and dq[-1][1] < stones[i]:
+            dq.pop()
 
-    q = deque()
-    q.append((-stones[0], 0))
-    max_arr.append(stones[0])
+        dq.append((i, stones[i]))
 
-    for i in range(1, len(stones)):
-        tmp = stones[i]
+        while dq and dq[0][0] < i - k + 1:
+            dq.popleft()
 
-        while q and -q[-1][0] < tmp:
-            q.pop()
+        result.append(dq[0][1])
 
-        q.append((-stones[i], i))
-
-        while i - q[0][1] >= k:
-            q.popleft()
-
-        max_arr.append(-q[0][0])
-
-    return min(max_arr[k-1:])
+    return min(result[k-1:])
