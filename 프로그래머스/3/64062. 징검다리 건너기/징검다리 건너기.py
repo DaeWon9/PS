@@ -1,21 +1,29 @@
-from collections import deque
-
+# 최대 2억명 -> 이분탐색?
+# mid 명이 건널 수 있다고 가정
+    
 def solution(stones, k):   
-    result = list()
-    dq = deque()
-    
-    if (len(stones) == k):
-        return max(stones)
-    
-    for i in range(len(stones)):
-        while dq and dq[-1][1] < stones[i]:
-            dq.pop()
+    answer = 1
+    start = 1
+    end = max(stones)
 
-        dq.append((i, stones[i]))
+    while(start <= end):
+        is_possible = True
+        mid  = (start + end) // 2
 
-        while dq and dq[0][0] < i - k + 1:
-            dq.popleft()
+        cnt = 0
+        for stone in stones:
+            if (stone - mid < 0):
+                cnt += 1
+                if (cnt >= k): # 건너기 불가능
+                    is_possible = False
+                    break
+            else:
+                cnt = 0
+        
+        if (is_possible):
+            answer = mid
+            start = mid + 1
+        else:
+            end = mid - 1
 
-        result.append(dq[0][1])
-
-    return min(result[k-1:])
+    return answer
