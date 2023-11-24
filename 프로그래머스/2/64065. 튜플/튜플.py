@@ -13,8 +13,4 @@ def solution(s):
         for add_data in add_datas:
             answer.append(add_data)
     
-    
-
-
-
     return answer
