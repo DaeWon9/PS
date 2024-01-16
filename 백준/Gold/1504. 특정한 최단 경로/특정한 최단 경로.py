@@ -12,6 +12,9 @@ def dijkstra(start_vertex):
     while min_heap:
         vertex, value = heapq.heappop(min_heap) 
 
+        if distance_list[vertex] < value:
+            continue
+
         for v in adj_vertices[vertex]:
             new_distacne = value + graph[vertex][v]
 
