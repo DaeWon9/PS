@@ -1,6 +1,7 @@
 import sys
+input = sys.stdin.readline
 
-case_count = int(sys.stdin.readline())
+case_count = int(input())
 
 for _ in range(case_count):
     n, m, w = map(int, sys.stdin.readline().split())  
@@ -9,12 +10,12 @@ for _ in range(case_count):
     is_has_minus_cycle = False
 
     for _ in range(m):
-        start, end, time = map(int, sys.stdin.readline().split())
+        start, end, time = map(int, input().split())
         edges.append((start, end, time))
         edges.append((end, start, time))
     
     for _ in range(w):
-        start, end, time = map(int, sys.stdin.readline().split())
+        start, end, time = map(int, input().split())
         edges.append((start, end, -time))
 
     for count in range(n):
