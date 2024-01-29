@@ -1,6 +1,6 @@
 import sys
 input = sys.stdin.readline
-
+sys.setrecursionlimit(10**6)
 # ( Fn+1 Fn   )  =  ( 1 1 ) ^n
 # ( Fn   Fn-1 )     ( 1 0 )
 
@@ -14,7 +14,9 @@ def multiply_matrix(matrix1, matrix2):
 
 # 분할정복
 def power_matrix(base_matrix, n):
-    if n == 1:  # b의 값이 1이 될 때까지 재귀
+    if n == 0:
+        return [[1, 0], [0, 1]]
+    elif n == 1:  # b의 값이 1이 될 때까지 재귀
         return base_matrix
     else:
         temp = power_matrix(base_matrix, n // 2)
@@ -23,8 +25,8 @@ def power_matrix(base_matrix, n):
         else:
             return multiply_matrix(multiply_matrix(temp, temp), base_matrix)
 
-base_matrix = [[1, 1], [1, 0]] 
+base_matrix = [[1, 1], [1, 0]]
 n = int(input())
 
-result_matrix = power_matrix(base_matrix, n)
-print(result_matrix[0][1] % 1000000007)
+result_matrix = power_matrix(base_matrix, n-1)
+print(result_matrix[0][0] % 1000000007)
