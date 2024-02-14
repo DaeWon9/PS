@@ -45,11 +45,11 @@ for combi in list(combinations(range(virus_id), M)):
     copied_board = copy.deepcopy(board)
     heap = []
 
-    virus_pos_list = []
+    initial_virus_visited = [[False for _ in range(N)] for _ in range(N)]
     
     for id in combi:
         virus_r, virus_c = virus_pos_dict[id]
-        virus_pos_list.append([virus_r, virus_c])
+        initial_virus_visited[virus_r][virus_c] = True
         copied_board[virus_r][virus_c] = 1 # set virus
 
         for index in range(4):
@@ -63,7 +63,7 @@ for combi in list(combinations(range(virus_id), M)):
     while heap:
         time, row, col = heapq.heappop(heap)
 
-        if([row, col] in virus_pos_list):
+        if(initial_virus_visited[row][col]):
             continue
 
         if(copied_board[row][col] != 0 and copied_board[row][col] > time):
