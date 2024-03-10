@@ -29,7 +29,7 @@ def union(x, y):
 N = int(input())
 edges = []
 parent = [i for i in range(N)]
-rank = [0 for _ in range(N)]
+rank = [1 for _ in range(N)]
 answer = 0
 
 for r in range(N):
