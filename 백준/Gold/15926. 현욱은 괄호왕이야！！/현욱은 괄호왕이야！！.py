@@ -4,7 +4,6 @@ input = sys.stdin.readline
 
 n = int(input())
 queue = deque()
-max_len = 0
 result_list = [0 for _ in range(n)]
 input_data = list(input().rstrip())
 
@@ -21,11 +20,18 @@ for id, data in enumerate(input_data):
     else:
         queue.append((data, id))
 
-result = str(result_list).replace('[', '').replace(']', '').replace(', ','').split('0')
+max_len = 0
+temp_len = 0
 
-for d in result:
-    temp_len = len(str(d))
-    if (max_len < temp_len):
-        max_len = temp_len
+for data in result_list:
+    if (data == 1):
+        temp_len += 1
+    else:
+        if (max_len < temp_len):
+            max_len = temp_len
+        temp_len = 0
 
+if (max_len < temp_len):
+    max_len = temp_len
+    
 print(max_len)
