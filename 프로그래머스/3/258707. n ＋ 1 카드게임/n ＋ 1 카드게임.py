@@ -1,13 +1,4 @@
 from itertools import combinations
-# n은 6의 배수
-# n/3 장을 뽑아 모두 가짐.
-# 처음에 보유중인 카드는 정해져있음.
-# dp + 그리디?
-
-# 처음에 소지중인 카드의 짝의경우 우선순위 1순위
-# 소지하지 않은 카드 패 내에 짝이 맞는 카드는 우선순위 2순위
-# 그 외의 카드는 우선순위 제외
-
 
 def get_pair_card(cur_card_list, target_sum):
     list_len = len(cur_card_list)
@@ -72,10 +63,8 @@ def solution(coin, cards):
                         cur_card_list.append(usable_card_list[id2])
                         
                         if (id1 < id2): # id1 이 항상 크도록 설정
-                            temp = id2
-                            id2 = id1
-                            id1 = temp
-                            
+                            id1, id2 = id2, id1
+                        
                         usable_card_list.pop(id1)
                         usable_card_list.pop(id2)
                         coin -= 2
@@ -90,9 +79,7 @@ def solution(coin, cards):
         index_2 = pair_card[1]
         
         if (index_1 < index_2): # index_1 이 항상 크도록 설정
-            temp = index_2
-            index_2 = index_1
-            index_1 = temp
+            index_1, index_2 = index_2, index_1
         
         cur_card_list.pop(index_1)
         cur_card_list.pop(index_2)
