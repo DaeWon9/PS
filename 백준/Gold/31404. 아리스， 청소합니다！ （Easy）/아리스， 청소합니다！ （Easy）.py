@@ -44,8 +44,12 @@ def solution():
             if (is_rule_b):
                 current_index = calaculate_index(current_r, current_c)
                 next_index = calaculate_index(dr, dc)
+                if (current_index != path_start_index):
+                    parent[next_index] = current_index
+                    queue.append((dr, dc, new_direction))
+                    continue
 
-                if (current_index == path_start_index and parent[next_index] == path_start_index):
+                if (parent[next_index] == path_start_index):
                     break
 
                 parent[next_index] = current_index
