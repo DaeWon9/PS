@@ -1,5 +1,4 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
 
 direction_x = [0, 1, 0, -1]
@@ -42,7 +41,7 @@ def solution():
         if (clear_board[current_r][current_c]): # RULE_B
             start_index = calc_index(current_r, current_c, current_d)
 
-            storage = deque([start_index])
+            storage = [start_index]
             is_first_visit = True
 
             while (is_movable(current_r, current_c) and clear_board[current_r][current_c]):
