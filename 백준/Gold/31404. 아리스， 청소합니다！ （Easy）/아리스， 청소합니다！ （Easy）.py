@@ -2,60 +2,73 @@ import sys
 from collections import deque
 input = sys.stdin.readline
 
+def calaculate_index(r, c):
+    return r * W + c
+    
 direction_x = [0, 1, 0, -1] # 상 우 하 좌 (시계방향)
 direction_y = [-1, 0, 1, 0]
 
 def is_movable(dr, dc):
-    if (0 <= dr <= H - 1 and 0 <= dc <= W - 1):
+    if (0 <= dr < H and 0 <= dc < W):
         return True
     return False
 
 def solution():
-    global answer, b_count, visted_board
+    global answer, b_count, parent
+
     while queue:
         current_r, current_c, current_d = queue.pop()
         is_rule_b = False
         new_direction = 0
+
         if (clear_board[current_r][current_c]): # RULE_B
             b_count += 1
             is_rule_b = True
-            new_direction = (current_d + int(rule_b[current_r][current_c])) % 4
+            new_direction = (current_d + rule_b[current_r][current_c]) % 4
+
+            if (path_start_index == -1):
+                path_start_index = calaculate_index(current_r, current_c)
+
         else: # RULE_A
-            answer += 1
-            answer += b_count
+            answer += (b_count + 1)
             b_count = 0
             clear_board[current_r][current_c] = True
-            new_direction = (current_d + int(rule_a[current_r][current_c])) % 4
-            visted_board = [[[] for _ in range(W)] for _ in range(H)]
-            
+            new_direction = (current_d + rule_a[current_r][current_c]) % 4
+            parent = [i for i in range(H * W)]
+            path_start_index = -1
+
         dr = current_r + direction_y[new_direction]
         dc = current_c + direction_x[new_direction]
 
         if (is_movable(dr, dc)):
             if (is_rule_b):
-                if (new_direction in visted_board[dr][dc]):
+                current_index = calaculate_index(current_r, current_c)
+                next_index = calaculate_index(dr, dc)
+
+                if (current_index == path_start_index and parent[next_index] == path_start_index):
                     break
-                else:
-                    visted_board[dr][dc].append(new_direction)
+
+                parent[next_index] = current_index
             queue.append((dr, dc, new_direction))
         else:
             break
 
-
 H, W = map(int, input().split())
 R, C, D = map(int, input().split())
+parent = [i for i in range(H * W)]
 
 clear_board = [[False for _ in range(W)] for _ in range(H)]
-visted_board = [[[] for _ in range(W)] for _ in range(H)]
+
+path_start_index = -1
 
 rule_a = []
 rule_b = []
 
 for _ in range(H):
-    rule_a.append(input().rstrip())
+    rule_a.append(list(map(int, str(input().rstrip()))))
 
 for _ in range(H):
-    rule_b.append(input().rstrip())
+    rule_b.append(list(map(int, str(input().rstrip()))))
 
 queue = deque()
 queue.append((R, C, D))
