@@ -27,6 +27,7 @@ def solution():
             new_direction = (current_d + rule_b[current_r][current_c]) % 4
 
             if (path_start_index == -1):
+                next_index_set.clear()
                 path_start_index = calaculate_index(current_r, current_c)
 
         else: # RULE_A
@@ -34,7 +35,6 @@ def solution():
             b_count = 0
             clear_board[current_r][current_c] = True
             new_direction = (current_d + rule_a[current_r][current_c]) % 4
-            parent = [i for i in range(H * W)]
             path_start_index = -1
 
         dr = current_r + direction_y[new_direction]
@@ -44,26 +44,27 @@ def solution():
             if (is_rule_b):
                 current_index = calaculate_index(current_r, current_c)
                 next_index = calaculate_index(dr, dc)
+
                 if (current_index != path_start_index):
-                    parent[next_index] = current_index
                     queue.append((dr, dc, new_direction))
                     continue
-
-                if (parent[next_index] == path_start_index):
+                
+                if (next_index in next_index_set):
                     break
-
-                parent[next_index] = current_index
+                
+                next_index_set.add(next_index)
+                
             queue.append((dr, dc, new_direction))
         else:
             break
 
 H, W = map(int, input().split())
 R, C, D = map(int, input().split())
-parent = [i for i in range(H * W)]
 
 clear_board = [[False for _ in range(W)] for _ in range(H)]
 
 path_start_index = -1
+next_index_set = set()
 
 rule_a = []
 rule_b = []
