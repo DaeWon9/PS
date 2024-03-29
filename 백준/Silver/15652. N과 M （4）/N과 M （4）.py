@@ -1,16 +1,17 @@
 import sys
-from itertools import combinations_with_replacement
+input = sys.stdin.readline
 
-n, m = map(int, sys.stdin.readline().split())
+def solution(combi:list, pivot):
+    if (len(combi) == M):
+        print(*combi)
+        return
+    
+    for i in range(pivot, N + 1):
+        combi.append(num_list[i])
+        solution(combi, i)
+        combi.pop()
 
-array = []
+N, M = map(int, input().split())
+num_list = [i for i in range(N + 1)]
 
-for i in range(1, n + 1):
-    array.append(i)
-
-combis = combinations_with_replacement(array, m)
-for combi in combis:
-    for num in combi:
-        print(num, end=" ")
-
-    print()
+solution([], 1)
