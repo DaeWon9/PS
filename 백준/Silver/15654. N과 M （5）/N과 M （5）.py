@@ -1,14 +1,20 @@
 import sys
-from itertools import permutations
+input = sys.stdin.readline
 
-n, m = map(int, sys.stdin.readline().split())
+def solution(combi:list, pivot):
+    if (len(combi) == M):
+        print(*combi)
+        return
+    
+    for i in range(1, N + 1):
+        if (num_list[i] in combi):
+            continue
+        combi.append(num_list[i])
+        solution(combi, i + 1)
+        combi.pop()
 
-array = list(map(int, sys.stdin.readline().split()))
-array.sort()
+N, M = map(int, input().split())
+num_list = [0] + list(map(int, input().split()))
+num_list.sort()
 
-combis = permutations(array, m)
-for combi in combis:
-    for num in combi:
-        print(num, end=" ")
-
-    print()
+solution([], 1)
