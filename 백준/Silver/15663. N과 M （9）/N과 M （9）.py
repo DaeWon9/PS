@@ -1,15 +1,28 @@
 import sys
-from itertools import permutations
+input = sys.stdin.readline
 
-n, m = map(int, sys.stdin.readline().split())
+def solution(combi):
+    if (len(combi) == M):
+        print(*combi)
+        return
+    
+    prev_num = 0
+    for i in range(1, N + 1):
+        if (prev_num == num_list[i]):
+            continue
+        if (i in visited):
+            continue
+        
+        prev_num = num_list[i]
+        combi.append(num_list[i])
+        visited.add(i)
+        solution(combi)
+        combi.pop()
+        visited.remove(i)
 
-array = list(map(int, sys.stdin.readline().split()))
-array.sort()
+N, M = map(int, input().split())
+num_list = [0] + list(map(int, input().split()))
+num_list.sort()
+visited = set()
 
-combis = list(set(list(permutations(array, m))))
-combis.sort()
-for combi in combis:
-    for num in combi:
-        print(num, end=" ")
-
-    print()
+solution([])
