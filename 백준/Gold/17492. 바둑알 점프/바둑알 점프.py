@@ -48,6 +48,8 @@ def solution(current_stone_set : set):
             if (is_jumpable(dr, dc, i, current_stone_set)):
                 copied_set = copy.deepcopy(current_stone_set)
                 copied_set.remove((dr, dc))
+                copied_set.remove((stone_r, stone_c))
+                copied_set.add((dr + direction_y[i], dc + direction_x[i]))
                 solution(copied_set)
 
 N = int(input())
