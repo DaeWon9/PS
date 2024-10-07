@@ -1,53 +1,38 @@
 import sys
-from collections import defaultdict, deque
-input = sys.stdin.readline
+from collections import defaultdict
 
-def set_max_distances(start_vertex):
-    if (max_distance_list[start_vertex]):
-        return max(max_distance_list[start_vertex])
-    
-    visted[start_vertex] = True
-    temp_list = []
+input = sys.stdin.readline
+sys.setrecursionlimit(10**7)
+
+def set_max_distances(start_vertex, graph, visited, max_distance_list):
+    visited.add(start_vertex)
+    first_max = second_max = 0 
 
     for child_info in graph[start_vertex]:
-        if (visted[child_info[0]]):
+        end_vertex, distance = child_info
+        if end_vertex in visited:
             continue
+        
+        temp_distance = distance + set_max_distances(end_vertex, graph, visited, max_distance_list)
 
-        temp_distacne = child_info[1]
-        temp_distacne += set_max_distances(child_info[0])
+        if temp_distance > first_max:
+            first_max, second_max = temp_distance, first_max
+        elif temp_distance > second_max:
+            second_max = temp_distance
     
-        temp_list.append(temp_distacne)
-    
-    temp_list.sort(reverse = True)
-    max_distance_list[start_vertex] = temp_list
+    max_distance_list[start_vertex] = (first_max, second_max)
+    return first_max
 
-    if (max_distance_list[start_vertex]):
-        return max(max_distance_list[start_vertex])
-    return 0
-
-def get_diameter():
+def get_diameter(max_distance_list):
     answer = 0
-    max_distance_list.sort(key = lambda x : -len(x))
-
-    for item in max_distance_list:
-        temp_answer = 0
-        if (not item):
-            break
-        if (len(item) > 1):
-            temp_answer = item[0] + item[1]
-        else:
-            temp_answer = item[0]
-
-        if (answer < temp_answer):
-            answer = temp_answer
-
+    for first_max, second_max in max_distance_list.values():
+        temp_answer = first_max + second_max
+        answer = max(answer, temp_answer)
     return answer
 
 v = int(input())
 graph = defaultdict(list)
-max_distance_list = [[]] * (v + 1)
-visted = [False] * (v + 1)
-visted[1] = True
+max_distance_list = {}
 
 for _ in range(v):
     input_numbers = list(map(int, input().split()))
@@ -55,12 +40,11 @@ for _ in range(v):
 
     for i in range(1, len(input_numbers), 2):
         end_vertex = input_numbers[i]
-
-        if (end_vertex == -1):
+        if end_vertex == -1:
             break
-        
-        distance = input_numbers[i+1]
+        distance = input_numbers[i + 1]
         graph[start_vertex].append((end_vertex, distance))
 
-set_max_distances(1)
-print(get_diameter())
+visited = set() 
+set_max_distances(1, graph, visited, max_distance_list)
+print(get_diameter(max_distance_list))
