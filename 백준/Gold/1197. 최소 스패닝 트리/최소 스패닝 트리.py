@@ -1,6 +1,7 @@
 import sys
 from collections import defaultdict
 input = sys.stdin.readline
+sys.setrecursionlimit(10**5)
 
 def find(x):
     if root[x] == x:
