@@ -96,7 +96,6 @@ N = int(input())
 board = []
 queue = deque()
 visited_set = set()
-
 group_children_dict = defaultdict(set)
 
 parent = [i for i in range(N * N)]
@@ -111,7 +110,7 @@ for row in range(N):
             target_index = get_index(row, col)
             queue.append((row, col, target_index))
             visited_set.add(target_index)
-            group_children_dict[target_index] = {target_index}
+            group_children_dict[target_index] = set()
 
     board.append(input_data)
 
