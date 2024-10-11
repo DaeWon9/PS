@@ -117,8 +117,6 @@ for row in range(N):
 
 time = 0
 
-union_ground()
-
 while True:
     union_ground()
 
