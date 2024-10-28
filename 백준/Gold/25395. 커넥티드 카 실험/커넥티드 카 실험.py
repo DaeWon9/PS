@@ -14,8 +14,6 @@ visited = [False] * (N + 1)
 queue.append(cars[S - 1])
 visited[S] = True
 
-cars.sort(key=lambda x: x[1])
-
 while queue:
     cur_idx, cur_loc, cur_fuel = queue.popleft()
     
