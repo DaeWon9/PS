@@ -3,51 +3,25 @@ import heapq
 input = sys.stdin.readline
 
 def get_adjusted_value(char):
-    value = ord(char)
-    return value - 6 if value >= 97 else value
+    if (char.islower()):
+        return ord(char) - ord('a') + 26
+    return ord(char) - ord('A')
 
 def is_movable(r, c, dr, dc):
-    return (0 <= dr < N and 0 <= dc < M and abs(get_adjusted_value(graph[r][c]) - get_adjusted_value(graph[dr][dc])) <= T)
+    return (0 <= dr < N and 0 <= dc < M and abs(graph[r][c] - graph[dr][dc]) <= T)
 
-def calc_move_time(prev_h, next_h):
-    prev_value = get_adjusted_value(prev_h)
-    next_value = get_adjusted_value(next_h)
-
-    if (prev_value >= next_value):
+def calc_move_time(prev_value, next_value, compare):
+    if compare == 1:  # 오르막
+        if (prev_value < next_value):
+            return (next_value - prev_value) ** 2
         return 1
-    return (prev_value - next_value) * (prev_value - next_value)
-
-def get_shortest_time(row, col):
-    tt = [[2147483647 for _ in range(M)] for _ in range(N)]
-    tt[row][col] = 0
-
-    h = [(0, row, col)]
-
-    while h:
-        t, r, c = heapq.heappop(h)
-
-        if (tt[r][c] < t):
-            continue
-
-        for i in range(4):
-            dr = r + direction_y[i]
-            dc = c + direction_x[i]
-
-            if (is_movable(r, c, dr, dc)):
-                move_time = calc_move_time(graph[r][c], graph[dr][dc])
-                updated_time = t + move_time
-
-                if (tt[dr][dc] > updated_time):
-                    tt[dr][dc] = updated_time
-
-                    heapq.heappush(h, (updated_time, dr, dc))
-
-    return tt[0][0]
-
+    else:  # 내리막
+        if (prev_value > next_value):
+            return (prev_value - next_value) ** 2
+        return 1
 
 direction_x = [0, 1, 0, -1]
 direction_y = [-1, 0, 1, 0]
-
 
 N, M, T, D = map(int, input().split())
 times = [[2147483647 for _ in range(M)] for _ in range(N)]
@@ -56,7 +30,12 @@ heap =  [(0, 0, 0)] # time, row, col
 graph = []
 
 for _ in range(N):
-    graph.append(input().rstrip())
+    input_data = input().rstrip()
+    row = []
+    for data in input_data:
+        row.append(get_adjusted_value(data))
+
+    graph.append(row)
 
 while heap:
     t, r, c = heapq.heappop(heap)
@@ -69,7 +48,7 @@ while heap:
         dc = c + direction_x[i]
 
         if (is_movable(r, c, dr, dc)):
-            move_time = calc_move_time(graph[r][c], graph[dr][dc])
+            move_time = calc_move_time(graph[r][c], graph[dr][dc], 1)
             updated_time = t + move_time
 
             if (times[dr][dc] > updated_time):
@@ -77,19 +56,35 @@ while heap:
 
                 heapq.heappush(heap, (updated_time, dr, dc))
 
-answer = 0
+times2 = [[2147483647 for _ in range(M)] for _ in range(N)]
+times2[0][0] = 0
+heap =  [(0, 0, 0)] # time, row, col
 
+while heap:
+    t, r, c = heapq.heappop(heap)
+
+    if (times2[r][c] < t):
+        continue
+
+    for i in range(4):
+        dr = r + direction_y[i]
+        dc = c + direction_x[i]
+
+        if (is_movable(r, c, dr, dc)):
+            move_time = calc_move_time(graph[r][c], graph[dr][dc], 2)
+            updated_time = t + move_time
+
+            if (times2[dr][dc] > updated_time):
+                times2[dr][dc] = updated_time
+
+                heapq.heappush(heap, (updated_time, dr, dc))
+
+answer = 0
 for row in range(N):
     for col in range(M):
-        if (times[row][col] >= D):
-            continue
+        result_time = times[row][col] + times2[row][col]
 
-        return_time = get_shortest_time(row, col)
-        result_time = return_time + times[row][col]
+        if (result_time <= D and answer < graph[row][col]):
+            answer = graph[row][col]
 
-        if (result_time <= D):
-            height = get_adjusted_value(graph[row][col])
-            if (answer < height):
-                answer = height
-
-print(answer - ord('A'))
+print(answer)
