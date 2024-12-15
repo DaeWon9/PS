@@ -1,5 +1,6 @@
 import sys
 from bisect import bisect_left
+sys.setrecursionlimit(10**5)
 input = sys.stdin.readline
 
 def find(x):
