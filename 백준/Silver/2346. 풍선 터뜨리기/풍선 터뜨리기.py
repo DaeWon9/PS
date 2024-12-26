@@ -1,15 +1,18 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
 
 N  = int(input()) # 0은 없다
-dq = deque(enumerate(map(int, input().split())))
+stack = list(enumerate(map(int, input().split())))
+cur_idx = 0
 
-while dq:
-    idx, now_turn = dq.popleft()
-    print(idx + 1, end=' ')
+while stack:
+    num, move = stack.pop(cur_idx)
+    print(num + 1, end= ' ')
+    stack_len = len(stack)
+    if (stack_len == 0):
+        break
 
-    if (now_turn > 0):
-        dq.rotate(-(now_turn - 1))
+    if (move < 0):
+        cur_idx = (cur_idx + move) % stack_len
     else:
-        dq.rotate(-now_turn)
+        cur_idx = (cur_idx + move - 1) % stack_len
