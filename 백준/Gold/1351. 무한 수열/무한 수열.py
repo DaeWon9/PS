@@ -1,5 +1,4 @@
 import sys
-from collections import defaultdict
 input = sys.stdin.readline
 
 def solve(N):
@@ -9,7 +8,7 @@ def solve(N):
     return A[N]
 
 N, P, Q = map(int, input().split())
-A = defaultdict(int)
+A = {}
 A[0] = 1
 A[1] = 2
 
