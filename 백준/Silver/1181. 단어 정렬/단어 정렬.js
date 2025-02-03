@@ -17,6 +17,4 @@ uniqueWords.sort((a, b) => {
     return a.length - b.length;
 });
 
-for (const word of uniqueWords) {
-    console.log(word);
-}
+console.log(uniqueWords.join("\n"));
