@@ -14,7 +14,11 @@ def combination(path: list = [], result: list = []):
         result.append(int(''.join(map(str, path))))
         return
     
-    for i in range(1, 10):
+    nums = [1, 3 ,7, 9]
+    if (len(path) == 0):
+        nums = [2, 3, 5, 7]
+
+    for i in nums:
         path.append(i)
         curNum = int(''.join(map(str, path)))
 
