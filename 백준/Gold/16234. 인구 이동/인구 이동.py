@@ -1,50 +1,70 @@
 import sys
 from collections import deque
+input = sys.stdin.readline
 
-dx = [1, -1, 0, 0]
-dy = [0, 0, 1, -1]
-def bfs(row, col):
-    area_queue = deque([(row, col)])
-    visit[row][col] = True
+def is_movable(dr, dc):
+    return (0 <= dr < N and 0 <= dc < N)
 
-    union = [(row, col)]
-    union_people_sum = area[row][col]
+def union():
+    visited = [[False for _ in range(N)] for _ in range(N)]
+    flag = False
     
-    while area_queue:
-        x, y = area_queue.popleft()
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if (0 <= nx < N and 0 <= ny < N and not visit[nx][ny]) and (L <= abs(area[nx][ny] - area[x][y]) <= R):
-                union.append((nx, ny))
-                visit[nx][ny] = True
-                area_queue.append((nx, ny))
-                union_people_sum += area[nx][ny]
-
-    for x, y in union:
-        area[x][y] = int(union_people_sum / len(union))
-
-    return(len(union))
-
-N, L, R = map(int, sys.stdin.readline().split()) 
-area = []
-a_list = []
-
-for i in range(N):
-    area.append(list(map(int, sys.stdin.readline().split())))
-
-day = 0    
-while (True):  
-    result_list = []
-    visit = [[False] * N for _ in range(N)]
     for row in range(N):
         for col in range(N):
-            if not visit[row][col]:
-                result_list.append(bfs(row, col))
+            if (visited[row][col]):
+                continue
 
-    if (max(result_list) == 1):
+            queue = deque()
+            queue.append((row, col))
+            visited[row][col] = True
+
+            unioned_pos_list = [(row, col)]
+            sum = board[row][col]
+
+            while queue:
+                r, c = queue.popleft()
+
+                for i in range(4):
+                    dr = r + direction_y[i]
+                    dc = c + direction_x[i]
+
+                    if (is_movable(dr, dc) and not visited[dr][dc]):
+                        diff = abs(board[r][c] - board[dr][dc])
+
+                        if (L <= diff <= R):
+                            unioned_pos_list.append((dr, dc))
+                            queue.append((dr, dc))
+                            visited[dr][dc] = True
+                            sum += board[dr][dc]
+            
+            count = len(unioned_pos_list)
+
+            if (count == 1):
+                continue
+            
+            updated_value = sum // count
+
+            for rr, cc in unioned_pos_list:
+                board[rr][cc] = updated_value
+            
+            flag = True
+    
+    return flag
+
+direction_x = [1, -1, 0, 0]
+direction_y = [0, 0, 1, -1]
+
+N, L, R = map(int, input().split())
+board = []
+answer = 0
+
+for _ in range(N):
+    board.append(list(map(int, input().split())))
+
+while True:
+    if (union()):
+        answer += 1
+    else:
         break
 
-    day += 1
-
-print(day)
+print(answer)
