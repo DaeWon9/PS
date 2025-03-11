@@ -4,9 +4,7 @@ def solution(info, n, m):
     INF = 2147483647
 
     dp = [[INF for i in range(m)] for _ in range(info_len+1)]
-    
-    for j in range(m):
-        dp[0][j] = 0
+    dp[0][0] = 0
     
     for i in range(info_len):
         a, b = info[i]
