@@ -9,7 +9,7 @@ def solution(money):
     dp_2 = [0] * (n)
 
     dp_1[0] = money[0] 
-    dp_1[1] = max(money[0], money[1])
+    dp_1[1] = money[0]
     # case1
     for i in range(2, n-1):
         dp_1[i] = max(dp_1[i-2] + money[i], dp_1[i-1])
