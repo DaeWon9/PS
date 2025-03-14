@@ -19,5 +19,4 @@ def solution(money):
     for i in range(2, n):
         dp_2[i] = max(dp_2[i-2] + money[i], dp_2[i-1])
         
-    answer = max(dp_1[n-2], dp_2[-1])
-    return answer
+    return max(dp_1[n-2], dp_2[-1])
