@@ -38,13 +38,11 @@ for set_len in range(2, m+1):
         else:
             B_count_dict[summed_area_B[i] - summed_area_B[i-set_len]] += 1
 
-B_keys_set = set(B_count_dict.keys())
 answer = 0
-
 for A_key in A_count_dict.keys():
     B_key = T - A_key
 
-    if (B_key in B_keys_set):
+    if (B_key in B_count_dict):
         answer += A_count_dict[A_key] * B_count_dict[B_key]
 
 print(answer)
