@@ -23,7 +23,7 @@ def is_melted(r, c):
 
             if (board[nr][nc] == 0 and (nr, nc) not in visited):
                 visited.add((nr, nc))
-                queue.append((nr, nc))
+                queue.appendleft((nr, nc))
 
     return False
 
