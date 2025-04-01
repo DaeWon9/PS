@@ -17,11 +17,9 @@ def union(x, y):
     
     if (x < y):
         group_id_set.discard(y)
-        group_id_set.add(x)
         parent[y] = x
     else:
         group_id_set.discard(x)
-        group_id_set.add(y)
         parent[x] = y
 
 N = int(input())
