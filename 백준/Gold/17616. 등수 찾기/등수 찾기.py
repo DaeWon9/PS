@@ -1,72 +1,38 @@
 import sys
-from collections import defaultdict, deque
+from collections import deque
 input = sys.stdin.readline
 
-def find(x):
-    if (x == parent[x]):
-        return x
-    
-    parent[x] = find(parent[x])
-    return parent[x]
+def bfs(vertices, start):
+    visited = [False] * (N + 1)
+    queue = deque([start])
+    visited[start] = True
+    cnt = 0
 
-def union(x, y):
-    x = find(x)
-    y = find(y)
+    while queue:
+        v = queue.popleft()
+        cnt += 1
 
-    if (x == y):
-        return
-    
-    if (x < y):
-        group_size[x] += group_size[y]
-        del group_size[y]
-        parent[y] = x
-    else:
-        group_size[y] += group_size[x]
-        del group_size[x]
-        parent[x] = y
+        for adj_vertex in vertices[v]:
+            if (not visited[adj_vertex]):
+                visited[adj_vertex] = True
+                queue.append(adj_vertex)
 
+    return cnt
 
 N, M, X = map(int, input().split())
-indegree = defaultdict(int)
-adj_vertices = defaultdict(list)
-level = [0] * (N+1)
 
-parent = [i for i in range(N+1)]
-group_size = defaultdict(lambda: 1)
-
-vertices_per_level = defaultdict(list)
+adj_vertices = [[] for _ in range(N + 1)]
+reversed_adj_vertices = [[] for _ in range(N + 1)]
 
 for _ in range(M):
-    A, B = map(int, input().split()) # A가 B보다 더 잘함
-    union(A, B)
-    adj_vertices[A].append(B)
-    indegree[B] += 1
+    u, v = map(int, input().split())
+    adj_vertices[u].append(v)
+    reversed_adj_vertices[v].append(u)
 
-target_group_id = parent[X]
-queue = deque()
+next_cnt = bfs(adj_vertices, X)
+prev_cnt = bfs(reversed_adj_vertices, X)
 
-for id in range(1, N+1):
-    if (indegree[id] == 0):
-        queue.append((1, id)) # level, vertex
-        level[id] = 1
+U = prev_cnt
+V = N - next_cnt + 1
 
-        if (parent[id] == target_group_id):
-            vertices_per_level[1].append(id)
-
-while queue:
-    l, v = queue.popleft()
-
-    for adj_vertex in adj_vertices[v]:
-        indegree[adj_vertex] -= 1
-        level[adj_vertex] = max(l+1, level[adj_vertex])
-
-        if (indegree[adj_vertex] == 0):
-            queue.append((level[adj_vertex], adj_vertex))
-
-            if (parent[adj_vertex] == target_group_id):
-                vertices_per_level[level[adj_vertex]].append(adj_vertex)
-
-min_result = level[X]
-max_result = level[X] + (len(vertices_per_level[level[X]])- 1) + (N - group_size[target_group_id])
-
-print(min_result, max_result)
+print(U, V)
