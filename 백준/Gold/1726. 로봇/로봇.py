@@ -1,5 +1,5 @@
 import sys
-import heapq
+from collections import deque
 input = sys.stdin.readline
 
 def convert_dir(dir):
@@ -44,15 +44,15 @@ goal_pos[0] -= 1
 goal_pos[1] -= 1
 goal_pos[2] = convert_dir(goal_pos[2])
 
-heap = []
-heapq.heappush(heap, (0, robot_pos[0], robot_pos[1], robot_pos[2]))
+queue = deque()
+queue.append((0, robot_pos[0], robot_pos[1], robot_pos[2]))
 
 # 방향별 기록
 dp = [[[float("inf") for _ in range(4)] for _ in range(N)] for _ in range(M)]
 dp[robot_pos[0]][robot_pos[1]][robot_pos[2]] = 0
 
-while heap:
-    t, r, c, d = heapq.heappop(heap)
+while queue:
+    t, r, c, d = queue.popleft()
 
     if (goal_pos[0] == r and goal_pos[1] == c and goal_pos[2] == d):
         print(t)
@@ -76,22 +76,22 @@ while heap:
 
         if (dp[nr][nc][d] > t+1):
             dp[nr][nc][d] = t+1
-            heapq.heappush(heap, (t+1, nr, nc, d))
+            queue.append((t+1, nr, nc, d))
     
     # 우측으로 돌기
     nd = turn_right(d)
     if (dp[r][c][nd] > t+1):
         dp[r][c][d] = t+1
-        heapq.heappush(heap, (t+1, r, c, nd))
+        queue.append((t+1, r, c, nd))
 
     # 좌측으로 돌기
     nd = turn_left(d)
     if (dp[r][c][nd] > t+1):
         dp[r][c][d] = t+1
-        heapq.heappush(heap, (t+1, r, c, nd))
+        queue.append((t+1, r, c, nd))
 
     # 반대방향으로 돌기
     nd = turn_reverse(d)
     if (dp[r][c][nd] > t+2):
         dp[r][c][d] = t+2
-        heapq.heappush(heap, (t+2, r, c, nd))
+        queue.append((t+2, r, c, nd))
