@@ -32,7 +32,6 @@ for _ in range(m):
         red_edges.append((u, v))
 
 parent = [i for i in range(n+1)]
-min_blue = 0
 edges_used = 0
 min_blue_edges = set()
 
@@ -45,9 +44,7 @@ for u, v in blue_edges:
         break
     if (union(u, v)):
         min_blue_edges.add((u, v))
-        min_blue += 1
         edges_used += 1
-
 
 parent = [i for i in range(n+1)]
 result = []
