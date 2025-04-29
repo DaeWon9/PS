@@ -3,30 +3,31 @@ input = sys.stdin.readline
 
 # 열린문은 항상 두개..
 
-def solve(idx, cnt, open1, open2):
-    global answer
+def solve(idx, open1, open2):
     if (idx == M):
-        answer = min(answer, cnt)
-        return
+        return 0
+    
+    if (dp[idx][open1][open2] != -1):
+        return dp[idx][open1][open2]
     
     target = nums[idx]
     
     # 이미 열려있는 경우
     if (target == open1 or target == open2):
-        solve(idx + 1, cnt, open1, open2)
-        return
+        dp[idx][open1][open2] = solve(idx + 1, open1, open2)
+        return dp[idx][open1][open2]
     
-    # open1을 target으로 이동
-    solve(idx + 1, cnt + abs(target - open1), target, open2)
-    # open2를 target으로 이동
-    solve(idx + 1, cnt + abs(target - open2), open1, target)
+    move1 = abs(target - open1) + solve(idx + 1, target, open2)
+    move2 = abs(target - open2) + solve(idx + 1, open1, target)
+    
+    dp[idx][open1][open2] = min(move1, move2)
+    return dp[idx][open1][open2]
 
 N = int(input())
 O1, O2 = map(int, input().split())
 M = int(input())
-answer = float('inf')
-
 nums = [int(input()) for _ in range(M)]
 
-solve(0, 0, O1, O2)
-print(answer)
+# dp[idx까지][open1][open2] = 최소 이동 횟수
+dp = [[[-1] * (N+1) for _ in range(N+1)] for _ in range(M+1)]
+print(solve(0, O1, O2))
