@@ -10,7 +10,7 @@ for _ in range(T):
     s, g, h = map(int, input().split())
 
     heap = [(0, s)]
-    distance = [100_000_000 for _ in range(n+1)]
+    distance = [float('inf') for _ in range(n+1)]
     distance[s] = 0
     adj_vertices = defaultdict(list)
 
@@ -45,7 +45,7 @@ for _ in range(T):
         last_vertex = h
         defalut_dist = distance[h]
 
-    after_distance = [100_000_000 for _ in range(n+1)]
+    after_distance = [float('inf') for _ in range(n+1)]
     after_distance[last_vertex] = 0
     heap = [(0, last_vertex)]
 
@@ -64,6 +64,9 @@ for _ in range(T):
 
     answer = []
     for goal in goals:
+        if (distance[goal] == float('inf')):
+            continue
+        
         if (defalut_dist + after_distance[goal] == distance[goal]):
             answer.append(goal)
 
